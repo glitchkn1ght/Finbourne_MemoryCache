@@ -43,7 +43,7 @@ namespace Finbourne_MemoryCache.CustomCache
                 cacheItemResult = EvictOldestItemFromCache(cacheItemResult);
             }
 
-            if (cacheItemResult.ErrorCode == 0)
+            if (cacheItemResult.Error.ErrorCode == 0)
             {
                 Cache.Add(Key, cacheItemResult.CacheItem);
             }
@@ -57,6 +57,13 @@ namespace Finbourne_MemoryCache.CustomCache
             {
                 var item = Cache.FirstOrDefault(x => x.Value.LastTimeOfAccess == Cache.Values.Min(y => y.LastTimeOfAccess));
 
+                if(item.Value == null)
+                {
+                    cacheItemResult.Error.ErrorCode = -103;
+                    cacheItemResult.Error.ErrorMessage = "Could not retrieve oldest item from the cache, aborting addition of new item.";
+                    return cacheItemResult;
+                }
+                
                 cacheItemResult.EvictionMessage = $"The cache is full, as a result the last recently used item with Key {item.Key} and Last time of access {item.Value.LastTimeOfAccess} has been evicted from the cache";
 
                 Cache.Remove(item.Key);
@@ -66,8 +73,9 @@ namespace Finbourne_MemoryCache.CustomCache
 
             catch (Exception ex)
             {
-                cacheItemResult.ErrorMessage = "There was a problem Evicting the oldest item from the cache";
-                cacheItemResult.ErrorCode = -101;
+                cacheItemResult.Error.ErrorCode = -101;
+                cacheItemResult.Error.ExceptionMessage = ex.Message;
+                cacheItemResult.Error.ErrorMessage = "An exception occurred whilst evicting the oldest item from the cache.";
 
                 return cacheItemResult;
             }
@@ -86,8 +94,8 @@ namespace Finbourne_MemoryCache.CustomCache
                 }
                 else
                 {
-                    cacheItemResult.ErrorCode = -102;
-                    cacheItemResult.ErrorMessage = $"Item with Key {itemKey} was not present in cache.";
+                    cacheItemResult.Error.ErrorCode = -102;
+                    cacheItemResult.Error.ErrorMessage = $"Item with Key {itemKey} was not present in cache.";
                 }
 
                 return cacheItemResult;
@@ -95,11 +103,12 @@ namespace Finbourne_MemoryCache.CustomCache
 
             catch (Exception ex)
             {
-                cacheItemResult.ErrorMessage = $"An exception occurred while retrieving item with key {itemKey} from the cache";
-
-                cacheItemResult.ErrorCode = -102;
+                cacheItemResult.Error.ErrorCode = -102;
+                cacheItemResult.Error.ExceptionMessage = ex.Message;
+                cacheItemResult.Error.ErrorMessage = $"An exception occurred while retrieving item with key {itemKey} from the cache";
 
                 return cacheItemResult;
             }
         }
     }
+}

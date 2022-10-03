@@ -10,19 +10,19 @@ namespace Finbourne_MemoryCache.Models
         public CacheItemResult()
         {
             this.CacheItem = new CacheItem();
+            this.Error = new ErrorResult(); 
         }
 
         public CacheItemResult(object objectToStore)
         {
             this.CacheItem = new CacheItem(objectToStore);
+            this.Error = new ErrorResult();
         }
 
         public CacheItem CacheItem { get; set; }
 
+        public ErrorResult Error { get; set; }
+
         public string EvictionMessage { get; set; }
-
-        public string ErrorMessage { get; set; }
-
-        public int ErrorCode { get; set; }
     }
 }

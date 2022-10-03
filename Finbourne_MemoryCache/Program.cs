@@ -21,7 +21,7 @@ namespace Finbourne_MemoryCache
             Thread.Sleep(3000);
             //CustomMemoryCache.AddToCache("SomeKey2", "SomeValue2");
             //CustomMemoryCache.AddToCache("SomeKey3", "SomeValue3");
-            CustomMemoryCache.GetItemFromCache("someInvalidKey");
+            cache.GetItemFromCache("someInvalidKey");
 
             Console.WriteLine("Successfully Added to cache");
             Console.ReadLine();
