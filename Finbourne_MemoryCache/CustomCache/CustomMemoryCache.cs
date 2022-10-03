@@ -37,20 +37,31 @@ namespace Finbourne_MemoryCache.CustomCache
         public CacheItemResult AddToCache(string key, object objectToStore)
         {
             CacheItemResult cacheItemResult = new CacheItemResult(objectToStore);
-
-            if (Cache.Count >= CacheSize)
+            try
             {
-                cacheItemResult = EvictOldestItemFromCache(cacheItemResult);
+                if (Cache.Count >= CacheSize)
+                {
+                    cacheItemResult = EvictOldestItemFromCache(cacheItemResult);
+                }
+
+                if (cacheItemResult.Error.ErrorCode == 0)
+                {
+                    Cache.Add(key, cacheItemResult.CacheItem);
+                    cacheItemResult.ResultMessage += $"Item with key {key} was successfully added to the cache";
+                }
+
+                return cacheItemResult;
             }
 
-            if (cacheItemResult.Error.ErrorCode == 0)
+            catch (Exception ex)
             {
-                Cache.Add(key, cacheItemResult.CacheItem);
+                cacheItemResult.Error.ErrorCode = -111;
+                cacheItemResult.Error.ExceptionMessage = ex.Message;
+                cacheItemResult.Error.ErrorMessage = "An exception occurred whilst adding an item to the cache.";
+
+                return cacheItemResult;
             }
 
-            cacheItemResult.ResultMessage += $"Item with key {key} was successfully added to the cache";
-
-            return cacheItemResult;
         }
 
         private static CacheItemResult EvictOldestItemFromCache(CacheItemResult cacheItemResult)
@@ -65,8 +76,8 @@ namespace Finbourne_MemoryCache.CustomCache
                     cacheItemResult.Error.ErrorMessage = "Could not retrieve oldest item from the cache, aborting addition of new item.";
                     return cacheItemResult;
                 }
-                Cache.Remove(item.Key);
 
+                Cache.Remove(item.Key);
                 cacheItemResult.ResultMessage += $"As the cache is full the last recently used item with Key {item.Key} and Last time of access {item.Value.LastTimeOfAccess} has been evicted from the cache \n";
 
                 return cacheItemResult;
@@ -74,7 +85,7 @@ namespace Finbourne_MemoryCache.CustomCache
 
             catch (Exception ex)
             {
-                cacheItemResult.Error.ErrorCode = -110;
+                cacheItemResult.Error.ErrorCode = -112;
                 cacheItemResult.Error.ExceptionMessage = ex.Message;
                 cacheItemResult.Error.ErrorMessage = "An exception occurred whilst evicting the oldest item from the cache.";
 
@@ -106,7 +117,7 @@ namespace Finbourne_MemoryCache.CustomCache
 
             catch (Exception ex)
             {
-                cacheItemResult.Error.ErrorCode = -111;
+                cacheItemResult.Error.ErrorCode = -110;
                 cacheItemResult.Error.ExceptionMessage = ex.Message;
                 cacheItemResult.Error.ErrorMessage = $"An exception occurred while retrieving item with key {itemKey} from the cache";
 
