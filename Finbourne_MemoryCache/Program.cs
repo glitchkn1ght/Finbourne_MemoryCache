@@ -6,6 +6,12 @@ using System.Threading;
 using Finbourne_MemoryCache.Models;
 using Finbourne_MemoryCache.Interfaces;
 using Finbourne_MemoryCache.CustomCache;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using System.IO;
+using Finbourne_MemoryCache.BusinessLogic;
+using Finbourne_MemoryCache.Models.Config;
 
 namespace Finbourne_MemoryCache
 {
@@ -13,25 +19,43 @@ namespace Finbourne_MemoryCache
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var services = new ServiceCollection();
+            ConfigureServices(services);
 
-            CustomMemoryCache cache = CustomMemoryCache.GetInstance(2);
+            // create service provider
+            var serviceProvider = services.BuildServiceProvider();
 
-            cache.AddToCache("SomeKey1", "SomeValue1");
-            Thread.Sleep(3000);
-            //CustomMemoryCache.AddToCache("SomeKey2", "SomeValue2");
-            //CustomMemoryCache.AddToCache("SomeKey3", "SomeValue3");
-            cache.GetItemFromCache("someInvalidKey");
-
-            Console.WriteLine("Successfully Added to cache");
-            Console.ReadLine();
-
-            //var cachedObject = CustomMemoryCache.RetrieveFromCache("SomeKey");
+            serviceProvider.GetService<CustomeCache_Client>().UseCache();
         }
-    }
 
-  
+        private static void ConfigureServices(IServiceCollection services)
+        {
+            // build config
+            var configuration = new ConfigurationBuilder()
+            .SetBasePath(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\")))
+            .AddJsonFile("appsettings.json", optional: false)
+            .AddEnvironmentVariables()
+            .Build();
+
+            // configure logging
+            services.AddLogging(builder => builder.AddSerilog(
+                new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger()))
+                .BuildServiceProvider();
+
+
+            //Configure cache settings
+            services.Configure<CacheSettings>(configuration.GetSection("CacheSettings"));
+
+            // add app
+            services.AddTransient<CustomeCache_Client>();
+        }
+
+    }
 }
+
+
 
 
 
