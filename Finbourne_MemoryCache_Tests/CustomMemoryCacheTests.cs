@@ -1,8 +1,6 @@
-using NUnit.Framework;
-using Finbourne_MemoryCache.BusinessLogic;
 using Finbourne_MemoryCache.CustomCache;
-using Finbourne_MemoryCache.Models.ExampleClass;
 using Finbourne_MemoryCache.Models;
+using NUnit.Framework;
 
 namespace Finbourne_MemoryCache_Tests
 {
@@ -21,7 +19,15 @@ namespace Finbourne_MemoryCache_Tests
         {
             CacheItemResult actual = this.CustomMemoryCache.AddToCache("key1", "value1");
 
-            Assert.AreEqual(0, actual.Error.ErrorCode);
+            Assert.AreEqual(0, actual.StatusResult.StatusCode);
+        }
+
+        [Test]
+        public void WhenItemRetrievedSuccessfully_ThenReturnSuccess()
+        {
+            CacheItemResult actual = this.CustomMemoryCache.GetItemFromCache("key1", "value1");
+
+            Assert.AreEqual(0, actual.StatusResult.StatusCode);
         }
     }
 }

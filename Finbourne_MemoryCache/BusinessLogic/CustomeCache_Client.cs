@@ -1,14 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
-using Finbourne_MemoryCache.CustomCache;
-using Finbourne_MemoryCache.Models;
+﻿using Finbourne_MemoryCache.CustomCache;
 using Finbourne_MemoryCache.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Finbourne_MemoryCache.Models;
 using Finbourne_MemoryCache.Models.Config;
-using Microsoft.Extensions.Options;
-using System.Threading;
 using Finbourne_MemoryCache.Models.ExampleClass;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System;
+using System.Threading;
 
 namespace Finbourne_MemoryCache.BusinessLogic
 {
@@ -17,7 +15,6 @@ namespace Finbourne_MemoryCache.BusinessLogic
         private readonly ILogger<CustomeCache_Client> Logger;
         private readonly CustomMemoryCache CustomMemoryCache;
         private readonly CacheSettings CacheSettings;
-
 
         public CustomeCache_Client(ILogger<CustomeCache_Client> logger, IOptions<CacheSettings> cacheSettings)
         {
@@ -50,17 +47,17 @@ namespace Finbourne_MemoryCache.BusinessLogic
 
         private void GetCacheResult(CacheItemResult result)
         {
-            if (result.Error.ErrorCode == 0)
+            if (result.StatusResult.StatusCode == 0)
             {
-                Console.WriteLine(result.ResultMessage);
+                Console.WriteLine(result.StatusResult.StatusMessage);
             }
             else
             {
-                Console.WriteLine($"An Error Occurred: Code={result.Error.ErrorCode}, Message={result.Error.ErrorMessage}");
+                Console.WriteLine($"An Error Occurred: Code={result.StatusResult.StatusCode}, Message={result.StatusResult.StatusMessage}");
 
-                if (result.Error.ExceptionMessage != null)
+                if (result.StatusResult.ExceptionMessage != null)
                 {
-                    this.Logger.LogError($"Operation=GetCacheResult(CustomeCacheOrchestrator), Status=Failure, Message={result.Error.ExceptionMessage}");
+                    this.Logger.LogError($"Operation=GetCacheResult(CustomeCacheOrchestrator), Status=Failure, Message={result.StatusResult.ExceptionMessage}");
                 }
             }
         }

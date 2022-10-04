@@ -44,10 +44,10 @@ namespace Finbourne_MemoryCache.CustomCache
                     cacheItemResult = EvictOldestItemFromCache(cacheItemResult);
                 }
 
-                if (cacheItemResult.Error.ErrorCode == 0)
+                if (cacheItemResult.StatusResult.StatusCode == 0)
                 {
                     Cache.Add(key, cacheItemResult.CacheItem);
-                    cacheItemResult.ResultMessage += $"Item with key {key} was successfully added to the cache";
+                    cacheItemResult.StatusResult.StatusMessage += $"Item with key {key} was successfully added to the cache";
                 }
 
                 return cacheItemResult;
@@ -55,9 +55,9 @@ namespace Finbourne_MemoryCache.CustomCache
 
             catch (Exception ex)
             {
-                cacheItemResult.Error.ErrorCode = -111;
-                cacheItemResult.Error.ExceptionMessage = ex.Message;
-                cacheItemResult.Error.ErrorMessage = "An exception occurred whilst adding an item to the cache.";
+                cacheItemResult.StatusResult.StatusCode = -111;
+                cacheItemResult.StatusResult.ExceptionMessage = ex.Message;
+                cacheItemResult.StatusResult.StatusMessage = "An exception occurred whilst adding an item to the cache.";
 
                 return cacheItemResult;
             }
@@ -72,22 +72,22 @@ namespace Finbourne_MemoryCache.CustomCache
 
                 if(item.Value == null)
                 {
-                    cacheItemResult.Error.ErrorCode = -103;
-                    cacheItemResult.Error.ErrorMessage = "Could not retrieve oldest item from the cache, aborting addition of new item.";
+                    cacheItemResult.StatusResult.StatusCode = -103;
+                    cacheItemResult.StatusResult.StatusMessage = "Could not retrieve oldest item from the cache, aborting addition of new item. \n";
                     return cacheItemResult;
                 }
 
                 Cache.Remove(item.Key);
-                cacheItemResult.ResultMessage += $"As the cache is full the last recently used item with Key {item.Key} and Last time of access {item.Value.LastTimeOfAccess} has been evicted from the cache \n";
+                cacheItemResult.StatusResult.StatusMessage += $"Cache is full, the last recently used item with Key {item.Key} and LastAccessed {item.Value.LastTimeOfAccess} has been evicted from the cache \n";
 
                 return cacheItemResult;
             }
 
             catch (Exception ex)
             {
-                cacheItemResult.Error.ErrorCode = -112;
-                cacheItemResult.Error.ExceptionMessage = ex.Message;
-                cacheItemResult.Error.ErrorMessage = "An exception occurred whilst evicting the oldest item from the cache.";
+                cacheItemResult.StatusResult.StatusCode = -112;
+                cacheItemResult.StatusResult.ExceptionMessage = ex.Message;
+                cacheItemResult.StatusResult.StatusMessage = "An exception occurred whilst evicting the oldest item from the cache.";
 
                 return cacheItemResult;
             }
@@ -103,23 +103,22 @@ namespace Finbourne_MemoryCache.CustomCache
                     Cache[itemKey].LastTimeOfAccess = DateTime.Now;
 
                     cacheItemResult.CacheItem.ObjectInCache = Cache[itemKey];
+                    cacheItemResult.StatusResult.StatusMessage = $"Item with key {itemKey} was successfully retrieved from cache";
                 }
                 else
                 {
-                    cacheItemResult.Error.ErrorCode = -102;
-                    cacheItemResult.Error.ErrorMessage = $"Item with Key {itemKey} was not present in cache.";
+                    cacheItemResult.StatusResult.StatusCode = -102;
+                    cacheItemResult.StatusResult.StatusMessage = $"Item with Key {itemKey} was not present in cache.";
                 }
-
-                cacheItemResult.ResultMessage += "Item was successfully retrieved from cache";
 
                 return cacheItemResult;
             }
 
             catch (Exception ex)
             {
-                cacheItemResult.Error.ErrorCode = -110;
-                cacheItemResult.Error.ExceptionMessage = ex.Message;
-                cacheItemResult.Error.ErrorMessage = $"An exception occurred while retrieving item with key {itemKey} from the cache";
+                cacheItemResult.StatusResult.StatusCode = -110;
+                cacheItemResult.StatusResult.ExceptionMessage = ex.Message;
+                cacheItemResult.StatusResult.StatusMessage = $"An exception occurred while retrieving item with key {itemKey} from the cache";
 
                 return cacheItemResult;
             }
