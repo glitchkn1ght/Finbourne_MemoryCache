@@ -106,7 +106,7 @@ namespace Finbourne_MemoryCache.CustomCache
                 if (string.IsNullOrWhiteSpace(itemKey))
                 {
                     cacheItemResult.StatusResult.StatusCode = -101;
-                    cacheItemResult.StatusResult.StatusMessage = $"Parameter Error: Key supplied is null, emptry or only consists of whitespace characters";
+                    cacheItemResult.StatusResult.StatusMessage = $"Parameter Error: Key supplied is null, empty or only consists of whitespace characters";
                     return cacheItemResult;
                 }
 

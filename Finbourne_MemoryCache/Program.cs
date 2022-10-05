@@ -1,4 +1,4 @@
-﻿using Finbourne_MemoryCache.BusinessLogic;
+﻿using Finbourne_MemoryCache.Client;
 using Finbourne_MemoryCache.Models.Config;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +17,7 @@ namespace Finbourne_MemoryCache
             // create service provider
             var serviceProvider = services.BuildServiceProvider();
 
-            serviceProvider.GetService<CustomeCache_Client>().UseCache();
+            serviceProvider.GetService<CacheClient>().UseCache();
         }
 
         private static void ConfigureServices(IServiceCollection services)
@@ -41,9 +41,8 @@ namespace Finbourne_MemoryCache
             services.Configure<CacheSettings>(configuration.GetSection("CacheSettings"));
 
             // add app
-            services.AddTransient<CustomeCache_Client>();
+            services.AddTransient<CacheClient>();
         }
-
     }
 }
 

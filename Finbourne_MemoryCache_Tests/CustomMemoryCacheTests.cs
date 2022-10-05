@@ -15,11 +15,30 @@ namespace Finbourne_MemoryCache_Tests
         }
 
         [Test]
-        public void WhenItemAddedSuccessfully_ThenReturnSuccess()
+        public void WhenItemAddedSuccessfully_ThenaAddItemReturnSuccess()
         {
             CacheItemResult actual = this.CustomMemoryCache.AddToCache("key1", "value1");
 
             Assert.AreEqual(0, actual.StatusResult.StatusCode);
+        }
+
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("  ")]
+        [TestCase(null)]
+        public void WhenItemKeyNullOrWhiteSpace_ThenaAddItemReturnNonSuccess101(string testKey)
+        {
+            CacheItemResult actual = this.CustomMemoryCache.AddToCache(testKey, "value1");
+
+            Assert.AreEqual(-101, actual.StatusResult.StatusCode);
+        }
+
+        [TestCase(null)]
+        public void WhenItemObjectNull_ThenaAddItemReturnNonSuccess101(string testObject)
+        {
+            CacheItemResult actual = this.CustomMemoryCache.AddToCache("key1", testObject);
+
+            Assert.AreEqual(-101, actual.StatusResult.StatusCode);
         }
 
         [Test]

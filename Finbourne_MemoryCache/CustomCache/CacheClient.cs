@@ -7,15 +7,15 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Threading;
 
-namespace Finbourne_MemoryCache.BusinessLogic
+namespace Finbourne_MemoryCache.Client
 {
-    public class CustomeCache_Client
+    public class CacheClient
     {
-        private readonly ILogger<CustomeCache_Client> Logger;
+        private readonly ILogger<CacheClient> Logger;
         private readonly CustomMemoryCache CustomMemoryCache;
         private readonly CacheSettings CacheSettings;
 
-        public CustomeCache_Client(ILogger<CustomeCache_Client> logger, IOptions<CacheSettings> cacheSettings)
+        public CacheClient(ILogger<CacheClient> logger, IOptions<CacheSettings> cacheSettings)
         {
             this.Logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
