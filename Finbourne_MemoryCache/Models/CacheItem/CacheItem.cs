@@ -4,7 +4,7 @@ namespace Finbourne_MemoryCache.Models
 {
     public class CacheItem
     {
-        public object ObjectInCache { get; set; }
+        public object ObjectToCache { get; set; }
 
         public DateTime LastTimeOfAccess { get; set; }
 
@@ -12,8 +12,7 @@ namespace Finbourne_MemoryCache.Models
 
         public CacheItem(object objectToStore)
         {
-            this.ObjectInCache = objectToStore;
-            this.LastTimeOfAccess = DateTime.Now;
+            this.ObjectToCache = objectToStore;
         }
     }
 

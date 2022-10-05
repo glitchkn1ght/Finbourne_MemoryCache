@@ -51,6 +51,7 @@ namespace Finbourne_MemoryCache.CustomCache
 
                 if (cacheItemResult.StatusResult.StatusCode == 0)
                 {
+                    cacheItemResult.CacheItem.LastTimeOfAccess = DateTime.UtcNow;  
                     Cache.Add(itemKey, cacheItemResult.CacheItem);
                     cacheItemResult.StatusResult.StatusMessage += $"Item with key {itemKey} was successfully added to the cache";
                 }
@@ -112,9 +113,9 @@ namespace Finbourne_MemoryCache.CustomCache
 
                 if (Cache.ContainsKey(itemKey))
                 {
-                    Cache[itemKey].LastTimeOfAccess = DateTime.Now;
+                    Cache[itemKey].LastTimeOfAccess = DateTime.UtcNow;
 
-                    cacheItemResult.CacheItem.ObjectInCache = Cache[itemKey];
+                    cacheItemResult.CacheItem.ObjectToCache = Cache[itemKey];
                     cacheItemResult.StatusResult.StatusMessage = $"Item with key {itemKey} was successfully retrieved from cache";
                 }
                 else
