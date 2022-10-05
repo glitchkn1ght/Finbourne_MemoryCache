@@ -1,4 +1,4 @@
-﻿namespace Finbourne_MemoryCache.Models.Config
+﻿namespace Finbourne_MemoryCache.Config
 {
     public class CacheSettings
     {
