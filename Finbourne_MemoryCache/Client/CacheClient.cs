@@ -21,7 +21,7 @@ namespace Finbourne_MemoryCache.Client
 
             this.CacheSettings = cacheSettings.Value;
 
-            this.CustomMemoryCache = CustomMemoryCache.GetInstance(this.CacheSettings.CacheSize);
+            this.CustomMemoryCache = CustomMemoryCache.GetInstance(this.CacheSettings.CacheSize, new CacheOrchestrator());
         }
 
         public void UseCache()
@@ -37,8 +37,8 @@ namespace Finbourne_MemoryCache.Client
             Thread.Sleep(3000);
             this.GetCacheResult(this.CustomMemoryCache.AddToCache("SomeKey4", "SomeValue4"));
 
-            this.GetCacheResult(this.CustomMemoryCache.GetItemFromCache("SomeKey4"));
-            this.GetCacheResult(this.CustomMemoryCache.GetItemFromCache("someInvalidKey"));
+            this.GetCacheResult(this.CustomMemoryCache.GetFromCache("SomeKey4"));
+            this.GetCacheResult(this.CustomMemoryCache.GetFromCache("someInvalidKey"));
     
             Console.WriteLine("---END---");
             Console.ReadLine();
