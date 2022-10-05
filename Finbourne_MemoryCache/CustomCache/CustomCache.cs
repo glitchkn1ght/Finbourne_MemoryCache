@@ -74,19 +74,19 @@ namespace Finbourne_MemoryCache.Cache
 
                     cacheItemResult.CacheItem = item;
 
-                    cacheItemResult.StatusResult.StatusMessage = $"Item with key {itemKey} was successfully retrieved from cache";
+                    cacheItemResult.StatusResult.StatusMessage = $"Item with key {itemKey} was successfully retrieved from cache \n";
                 }
                 else
                 {
                     cacheItemResult.StatusResult.StatusCode = -102;
-                    cacheItemResult.StatusResult.StatusMessage = $"Item with Key {itemKey} was present in cache but could not be retrieved;";
+                    cacheItemResult.StatusResult.StatusMessage = $"Item with Key {itemKey} was present in cache but could not be retrieved. \n";
                 }
             }
 
             else
             {
                 cacheItemResult.StatusResult.StatusCode = -103;
-                cacheItemResult.StatusResult.StatusMessage = $"Item with Key {itemKey} was not present in cache.";
+                cacheItemResult.StatusResult.StatusMessage = $"Item with Key {itemKey} was not present in cache. \n";
             }
 
             return cacheItemResult;

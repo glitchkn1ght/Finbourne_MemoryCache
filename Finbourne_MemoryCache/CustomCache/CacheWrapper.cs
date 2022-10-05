@@ -33,14 +33,14 @@ namespace Finbourne_MemoryCache.Cache
                 if (string.IsNullOrWhiteSpace(itemKey))
                 {
                     cacheItemResult.StatusResult.StatusCode = -101;
-                    cacheItemResult.StatusResult.StatusMessage = $"Parameter error: Key supplied is null, empty or only consists of whitespace characters";
+                    cacheItemResult.StatusResult.StatusMessage = $"Parameter error: Key supplied is null, empty or only consists of whitespace characters. \n";
                     return cacheItemResult;
                 }
 
                 if (objectToStore == null)
                 {
                     cacheItemResult.StatusResult.StatusCode = -101;
-                    cacheItemResult.StatusResult.StatusMessage = $"Parameter error: Object supplied is null.";
+                    cacheItemResult.StatusResult.StatusMessage = $"Parameter error: Object supplied is null. \n";
                     return cacheItemResult;
                 }
 
@@ -63,7 +63,7 @@ namespace Finbourne_MemoryCache.Cache
             {
                 cacheItemResult.StatusResult.StatusCode = -111;
                 cacheItemResult.StatusResult.ExceptionMessage = ex.Message;
-                cacheItemResult.StatusResult.StatusMessage = "An exception occurred whilst updating the cache.";
+                cacheItemResult.StatusResult.StatusMessage = "An exception occurred whilst updating the cache. \n";
 
                 return cacheItemResult;
             }
@@ -77,7 +77,7 @@ namespace Finbourne_MemoryCache.Cache
                 if (string.IsNullOrWhiteSpace(itemKey))
                 {
                     cacheItemResult.StatusResult.StatusCode = -101;
-                    cacheItemResult.StatusResult.StatusMessage = $"Parameter Error: Key supplied is null, empty or only consists of whitespace characters";
+                    cacheItemResult.StatusResult.StatusMessage = $"Parameter Error: Key supplied is null, empty or only consists of whitespace characters \n";
                     return cacheItemResult;
                 }
 
@@ -90,7 +90,7 @@ namespace Finbourne_MemoryCache.Cache
             {
                 cacheItemResult.StatusResult.StatusCode = -110;
                 cacheItemResult.StatusResult.ExceptionMessage = ex.Message;
-                cacheItemResult.StatusResult.StatusMessage = $"An exception occurred while retrieving item with key {itemKey} from the cache";
+                cacheItemResult.StatusResult.StatusMessage = $"An exception occurred while retrieving item with key {itemKey} from the cache \n";
 
                 return cacheItemResult;
             }
