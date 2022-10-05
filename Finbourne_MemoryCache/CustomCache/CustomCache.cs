@@ -35,7 +35,7 @@ namespace Finbourne_MemoryCache.Cache
             else
             {
                 cacheItemResult.StatusResult.StatusCode = -105;
-                cacheItemResult.StatusResult.StatusMessage += $"Key {itemKey} is already present in dictionary, cannot add Item duplicate key.\n";
+                cacheItemResult.StatusResult.StatusMessage += $"Item with Key {itemKey} is already present in dictionary, cannot add Item with duplicate key.\n";
             }
 
             return cacheItemResult;
@@ -51,7 +51,7 @@ namespace Finbourne_MemoryCache.Cache
             if (!removalResult)
             {
                 cacheItemResult.StatusResult.StatusCode = -104;
-                cacheItemResult.StatusResult.StatusMessage += $"Cache is full but could not evict least recently used item with Key {item.Key} and LastAccessed {item.Value.LastTimeOfAccess} from cache \n";
+                cacheItemResult.StatusResult.StatusMessage += $"Cache is full but could not evict least recently used item with Key {item.Key} and LastAccessed {item.Value.LastTimeOfAccess} from the cache \n";
             }
             else
             {
@@ -74,7 +74,7 @@ namespace Finbourne_MemoryCache.Cache
 
                     cacheItemResult.CacheItem = item;
 
-                    cacheItemResult.StatusResult.StatusMessage = $"Item with key {itemKey} was successfully retrieved from cache \n";
+                    cacheItemResult.StatusResult.StatusMessage = $"Item with Key {itemKey} was successfully retrieved from the cache. \n";
                 }
                 else
                 {
@@ -86,7 +86,7 @@ namespace Finbourne_MemoryCache.Cache
             else
             {
                 cacheItemResult.StatusResult.StatusCode = -103;
-                cacheItemResult.StatusResult.StatusMessage = $"Item with Key {itemKey} was not present in cache. \n";
+                cacheItemResult.StatusResult.StatusMessage = $"Item with Key {itemKey} was not present in the cache. \n";
             }
 
             return cacheItemResult;

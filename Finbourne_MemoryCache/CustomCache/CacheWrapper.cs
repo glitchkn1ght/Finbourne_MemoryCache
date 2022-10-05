@@ -15,7 +15,7 @@ namespace Finbourne_MemoryCache.Cache
     
     public sealed class CacheWrapper : ICacheWrapper
     {
-        private ICustomCache CustomCache;
+        private readonly ICustomCache CustomCache;
 
         private readonly CacheSettings CacheSettings;
 
