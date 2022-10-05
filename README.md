@@ -11,4 +11,4 @@ General Design
 
 Areas for improvement
 - Make sure all methods/classes are thread safe. 
-- Any non null object is accepted into the cache, including ones which are almost certainly invalid such as whitespace only strings. 
+- Any non null object is accepted into the cache, including ones which are almost certainly invalid such as whitespace only strings. Really I'd like abstract the validation into its own class as its bulking out the wrapper.

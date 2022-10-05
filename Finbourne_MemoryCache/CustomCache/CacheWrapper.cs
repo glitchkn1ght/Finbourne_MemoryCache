@@ -22,7 +22,7 @@ namespace Finbourne_MemoryCache.Cache
         public CacheWrapper(IOptionsMonitor<CacheSettings> cacheSettings, ICustomCache customCache)
         {
             this.CacheSettings = cacheSettings.CurrentValue;
-            this.CustomCache = customCache;
+            this.CustomCache = customCache ?? throw new ArgumentNullException(nameof(customCache));
         }
 
         public CacheItemResult AddToCache(string itemKey, object objectToStore)
