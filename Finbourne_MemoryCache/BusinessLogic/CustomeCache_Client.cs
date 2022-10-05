@@ -1,5 +1,4 @@
 ﻿using Finbourne_MemoryCache.CustomCache;
-using Finbourne_MemoryCache.Interfaces;
 using Finbourne_MemoryCache.Models;
 using Finbourne_MemoryCache.Models.Config;
 using Finbourne_MemoryCache.Models.ExampleClass;

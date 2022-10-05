@@ -23,11 +23,29 @@ namespace Finbourne_MemoryCache_Tests
         }
 
         [Test]
-        public void WhenItemRetrievedSuccessfully_ThenReturnSuccess()
+        public void WhenItemPresentInCache_ThenGetItemReturnsSuccess()
         {
-            CacheItemResult actual = this.CustomMemoryCache.GetItemFromCache("key1", "value1");
+            CacheItemResult addResult = this.CustomMemoryCache.AddToCache("key1", "value1");
 
-            Assert.AreEqual(0, actual.StatusResult.StatusCode);
+            CacheItemResult retrievalResult = this.CustomMemoryCache.GetItemFromCache("key1");
+
+            Assert.AreEqual(0, retrievalResult.StatusResult.StatusCode);
+        }
+
+        [Test]
+        public void WhenItemNotPresentInCache_ThenGetItemReturnsNonSuccess102()
+        {
+            CacheItemResult retrievalResult = this.CustomMemoryCache.GetItemFromCache("key2");
+
+            Assert.AreEqual(-102, retrievalResult.StatusResult.StatusCode);
+        }
+
+        [Test]
+        public void WhenKeyIsNullOrWhiteSpace_ThenGetItemReturnsNonSuccess101()
+        {
+            CacheItemResult retrievalResult = this.CustomMemoryCache.GetItemFromCache(null);
+
+            Assert.AreEqual(-101, retrievalResult.StatusResult.StatusCode);
         }
     }
 }

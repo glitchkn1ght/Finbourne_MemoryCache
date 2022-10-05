@@ -1,17 +1,9 @@
-﻿using System;
-using Microsoft.Extensions.Caching.Memory;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading;
-using Finbourne_MemoryCache.Models;
-using Finbourne_MemoryCache.Interfaces;
-using Finbourne_MemoryCache.CustomCache;
+﻿using Finbourne_MemoryCache.BusinessLogic;
+using Finbourne_MemoryCache.Models.Config;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System.IO;
-using Finbourne_MemoryCache.BusinessLogic;
-using Finbourne_MemoryCache.Models.Config;
 
 namespace Finbourne_MemoryCache
 {

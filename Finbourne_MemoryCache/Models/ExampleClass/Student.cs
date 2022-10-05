@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Finbourne_MemoryCache.Models.ExampleClass
+﻿namespace Finbourne_MemoryCache.Models.ExampleClass
 {
     //Just to show the cache works with more complex objects. 
     public class Student

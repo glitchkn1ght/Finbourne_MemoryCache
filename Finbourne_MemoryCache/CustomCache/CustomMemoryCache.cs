@@ -1,12 +1,11 @@
-﻿using Finbourne_MemoryCache.Interfaces;
-using Finbourne_MemoryCache.Models;
+﻿using Finbourne_MemoryCache.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Finbourne_MemoryCache.CustomCache
 {
-    public sealed class CustomMemoryCache : ICustomMemoryCache
+    public sealed class CustomMemoryCache
     {
         private static volatile CustomMemoryCache instance;
         private static object syncRoot = new Object();
@@ -34,11 +33,17 @@ namespace Finbourne_MemoryCache.CustomCache
             return instance;
         }
 
-        public CacheItemResult AddToCache(string key, object objectToStore)
+        public CacheItemResult AddToCache(string itemKey, object objectToStore)
         {
             CacheItemResult cacheItemResult = new CacheItemResult(objectToStore);
             try
-            {
+            {                
+                if (string.IsNullOrWhiteSpace(itemKey) || objectToStore == null)
+                {
+                    cacheItemResult.StatusResult.StatusCode = -101;
+                    cacheItemResult.StatusResult.StatusMessage = $"Parameter error: Please check supplied parameters.";
+                }
+
                 if (Cache.Count >= CacheSize)
                 {
                     cacheItemResult = EvictOldestItemFromCache(cacheItemResult);
@@ -46,8 +51,8 @@ namespace Finbourne_MemoryCache.CustomCache
 
                 if (cacheItemResult.StatusResult.StatusCode == 0)
                 {
-                    Cache.Add(key, cacheItemResult.CacheItem);
-                    cacheItemResult.StatusResult.StatusMessage += $"Item with key {key} was successfully added to the cache";
+                    Cache.Add(itemKey, cacheItemResult.CacheItem);
+                    cacheItemResult.StatusResult.StatusMessage += $"Item with key {itemKey} was successfully added to the cache";
                 }
 
                 return cacheItemResult;
@@ -64,7 +69,7 @@ namespace Finbourne_MemoryCache.CustomCache
 
         }
 
-        private static CacheItemResult EvictOldestItemFromCache(CacheItemResult cacheItemResult)
+        private CacheItemResult EvictOldestItemFromCache(CacheItemResult cacheItemResult)
         {
             try
             {
@@ -98,6 +103,13 @@ namespace Finbourne_MemoryCache.CustomCache
             CacheItemResult cacheItemResult = new CacheItemResult();
             try
             {
+                if (string.IsNullOrWhiteSpace(itemKey))
+                {
+                    cacheItemResult.StatusResult.StatusCode = -101;
+                    cacheItemResult.StatusResult.StatusMessage = $"Parameter Error: Key supplied is null, emptry or only consists of whitespace characters";
+                    return cacheItemResult;
+                }
+
                 if (Cache.ContainsKey(itemKey))
                 {
                     Cache[itemKey].LastTimeOfAccess = DateTime.Now;
