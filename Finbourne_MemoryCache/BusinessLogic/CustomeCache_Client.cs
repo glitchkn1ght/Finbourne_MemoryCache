@@ -26,7 +26,7 @@ namespace Finbourne_MemoryCache.BusinessLogic
 
         public void UseCache()
         {
-            //A bit clunky but as it's just for demonstration purposes i didn't think more elegance was neccessary.
+            //I know this code is clunky but I wrote this class purely to demonstrate possible usage of the cache, not as an intended part of it's functionality. 
             //Thread sleep is to make times a bit easier to disnguish.
 
             this.GetCacheResult(this.CustomMemoryCache.AddToCache("SomeKey1", "SomeValue1"));
@@ -49,6 +49,7 @@ namespace Finbourne_MemoryCache.BusinessLogic
             if (result.StatusResult.StatusCode == 0)
             {
                 Console.WriteLine(result.StatusResult.StatusMessage);
+                this.Logger.LogInformation($"Operation=GetCacheResult(CustomeCacheOrchestrator), Status=Success, Message={result.StatusResult.StatusMessage}");
             }
             else
             {
