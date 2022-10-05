@@ -1,12 +1,8 @@
-﻿using Finbourne_MemoryCache.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Collections.Concurrent;
+﻿using Finbourne_MemoryCache.Config;
 using Finbourne_MemoryCache.Interfaces;
+using Finbourne_MemoryCache.Models;
 using Microsoft.Extensions.Options;
-using Finbourne_MemoryCache.Models.Config;
-using Finbourne_MemoryCache.Config;
+using System;
 
 namespace Finbourne_MemoryCache.Cache
 {
@@ -22,8 +18,6 @@ namespace Finbourne_MemoryCache.Cache
         private ICustomCache CustomCache;
 
         private readonly CacheSettings CacheSettings;
-        
-        private CacheWrapper() { }
 
         public CacheWrapper(IOptionsMonitor<CacheSettings> cacheSettings, ICustomCache customCache)
         {
@@ -36,14 +30,21 @@ namespace Finbourne_MemoryCache.Cache
             CacheItemResult cacheItemResult = new CacheItemResult(objectToStore);
             try
             {                
-                if (string.IsNullOrWhiteSpace(itemKey) || objectToStore == null)
+                if (string.IsNullOrWhiteSpace(itemKey))
                 {
                     cacheItemResult.StatusResult.StatusCode = -101;
-                    cacheItemResult.StatusResult.StatusMessage = $"Parameter error: Please check supplied parameters.";
+                    cacheItemResult.StatusResult.StatusMessage = $"Parameter error: Key supplied is null, empty or only consists of whitespace characters";
                     return cacheItemResult;
                 }
 
-               cacheItemResult = this.CustomCache.TryAddItemToCache(itemKey, objectToStore);
+                if (objectToStore == null)
+                {
+                    cacheItemResult.StatusResult.StatusCode = -101;
+                    cacheItemResult.StatusResult.StatusMessage = $"Parameter error: Object supplied is null.";
+                    return cacheItemResult;
+                }
+
+                cacheItemResult = this.CustomCache.TryAddItemToCache(itemKey, objectToStore);
                
                if (cacheItemResult.StatusResult.StatusCode != 0)
                {
@@ -66,7 +67,6 @@ namespace Finbourne_MemoryCache.Cache
 
                 return cacheItemResult;
             }
-
         }
 
         public CacheItemResult GetFromCache(string itemKey)

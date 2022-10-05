@@ -1,8 +1,8 @@
-﻿using Finbourne_MemoryCache.Models;
+﻿using Finbourne_MemoryCache.Interfaces;
+using Finbourne_MemoryCache.Models;
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
-using Finbourne_MemoryCache.Interfaces;
 
 namespace Finbourne_MemoryCache.Cache
 {
@@ -92,6 +92,4 @@ namespace Finbourne_MemoryCache.Cache
             return cacheItemResult;
         }
     }
-
-
 }

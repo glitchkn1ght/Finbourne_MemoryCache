@@ -1,7 +1,7 @@
-﻿using Finbourne_MemoryCache.Client;
-using Finbourne_MemoryCache.Cache;
+﻿using Finbourne_MemoryCache.Cache;
+using Finbourne_MemoryCache.Client;
+using Finbourne_MemoryCache.Config;
 using Finbourne_MemoryCache.Interfaces;
-using Finbourne_MemoryCache.Models.Config;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -42,7 +42,7 @@ namespace Finbourne_MemoryCache
             //Configure cache settings
             services.Configure<CacheSettings>(configuration.GetSection("CacheSettings"));
 
-
+            //Add cache class and wrapper.
             services.AddSingleton<ICustomCache, CustomCache>();  
             services.AddSingleton<ICacheWrapper,CacheWrapper>();
 
