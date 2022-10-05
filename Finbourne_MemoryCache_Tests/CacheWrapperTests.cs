@@ -1,11 +1,10 @@
 using Finbourne_MemoryCache.Cache;
-using Finbourne_MemoryCache.Models;
-using NUnit.Framework;
-using Moq;
-using Finbourne_MemoryCache.Interfaces;
-using System.Collections.Concurrent;
 using Finbourne_MemoryCache.Config;
+using Finbourne_MemoryCache.Interfaces;
+using Finbourne_MemoryCache.Models;
 using Microsoft.Extensions.Options;
+using Moq;
+using NUnit.Framework;
 using System;
 
 namespace Finbourne_MemoryCache_Tests
