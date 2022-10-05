@@ -1,7 +1,7 @@
 ﻿using Finbourne_MemoryCache.Cache;
 using Finbourne_MemoryCache.Interfaces;
 using Finbourne_MemoryCache.Models;
-using Finbourne_MemoryCache.Models.Config;
+using Finbourne_MemoryCache.Config;
 using Finbourne_MemoryCache.Models.ExampleClass;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

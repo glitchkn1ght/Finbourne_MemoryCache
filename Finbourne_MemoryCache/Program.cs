@@ -1,7 +1,7 @@
 ﻿using Finbourne_MemoryCache.Client;
 using Finbourne_MemoryCache.Cache;
 using Finbourne_MemoryCache.Interfaces;
-using Finbourne_MemoryCache.Models.Config;
+using Finbourne_MemoryCache.Config;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;

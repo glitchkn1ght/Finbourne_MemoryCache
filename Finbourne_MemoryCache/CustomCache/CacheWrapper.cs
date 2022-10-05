@@ -5,7 +5,6 @@ using System.Linq;
 using System.Collections.Concurrent;
 using Finbourne_MemoryCache.Interfaces;
 using Microsoft.Extensions.Options;
-using Finbourne_MemoryCache.Models.Config;
 using Finbourne_MemoryCache.Config;
 
 namespace Finbourne_MemoryCache.Cache

@@ -7,7 +7,7 @@ using System.Collections.Concurrent;
 
 namespace Finbourne_MemoryCache_Tests
 {
-    public class GetTests
+    public class CustomCacheTests
     {
         //CustomMemoryCache CustomMemoryCache;
         //Mock<ICacheOrchestrator> CacheOrchestratorMock;
