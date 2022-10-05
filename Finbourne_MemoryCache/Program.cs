@@ -1,5 +1,5 @@
 ﻿using Finbourne_MemoryCache.Client;
-using Finbourne_MemoryCache.CustomCache;
+using Finbourne_MemoryCache.Cache;
 using Finbourne_MemoryCache.Interfaces;
 using Finbourne_MemoryCache.Models.Config;
 using Microsoft.Extensions.Configuration;
@@ -42,7 +42,9 @@ namespace Finbourne_MemoryCache
             //Configure cache settings
             services.Configure<CacheSettings>(configuration.GetSection("CacheSettings"));
 
-            services.AddTransient<ICacheOrchestrator, CacheOrchestrator>();
+
+            services.AddSingleton<ICustomCache, CustomCache>();  
+            services.AddSingleton<ICacheWrapper,CacheWrapper>();
 
             // add app
             services.AddTransient<CacheClient>();

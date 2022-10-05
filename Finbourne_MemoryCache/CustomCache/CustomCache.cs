@@ -4,17 +4,29 @@ using System.Collections.Concurrent;
 using System.Linq;
 using Finbourne_MemoryCache.Interfaces;
 
-namespace Finbourne_MemoryCache.CustomCache
+namespace Finbourne_MemoryCache.Cache
 {
-    public class CacheOrchestrator : ICacheOrchestrator
+    public class CustomCache : ICustomCache
     {
-        public CacheItemResult TryAddItemToCache(string itemKey, object objectToStore, ConcurrentDictionary<string, CacheItem> cache)
+        private ConcurrentDictionary<string, CacheItem> Cache { get; set; }
+
+        public CustomCache()
+        {
+            this.Cache = new ConcurrentDictionary<string, CacheItem>();
+        }
+
+        public int GetCacheCount()
+        {
+            return this.Cache.Count;
+        }
+
+        public CacheItemResult TryAddItemToCache(string itemKey, object objectToStore)
         {
             CacheItemResult cacheItemResult = new CacheItemResult(objectToStore);
 
             cacheItemResult.CacheItem.LastTimeOfAccess = DateTime.UtcNow;
 
-            bool additionSuccessful = cache.TryAdd(itemKey, cacheItemResult.CacheItem);
+            bool additionSuccessful = this.Cache.TryAdd(itemKey, cacheItemResult.CacheItem);
 
             if (additionSuccessful)
             {
@@ -22,24 +34,24 @@ namespace Finbourne_MemoryCache.CustomCache
             }
             else
             {
-                cacheItemResult.StatusResult.StatusCode = -104;
+                cacheItemResult.StatusResult.StatusCode = -105;
                 cacheItemResult.StatusResult.StatusMessage += $"Key {itemKey} is already present in dictionary, cannot add Item duplicate key.\n";
             }
 
             return cacheItemResult;
         }
 
-        public CacheItemResult EvictOldestItemFromCache(CacheItemResult cacheItemResult, ConcurrentDictionary<string, CacheItem> Cache)
+        public CacheItemResult EvictOldestItemFromCache(CacheItemResult cacheItemResult)
         {
-            var item = Cache.FirstOrDefault(x => x.Value.LastTimeOfAccess == Cache.Values.Min(y => y.LastTimeOfAccess));
+            var item = this.Cache.FirstOrDefault(x => x.Value.LastTimeOfAccess == Cache.Values.Min(y => y.LastTimeOfAccess));
 
             CacheItem removedItem;
-            bool removalResult = Cache.TryRemove(item.Key, out removedItem);
+            bool removalResult = this.Cache.TryRemove(item.Key, out removedItem);
 
             if (!removalResult)
             {
                 cacheItemResult.StatusResult.StatusCode = -104;
-                cacheItemResult.StatusResult.StatusMessage += $"Cache is bull but could not evict least recently used item with Key {item.Key} and LastAccessed {item.Value.LastTimeOfAccess} from cache \n";
+                cacheItemResult.StatusResult.StatusMessage += $"Cache is full but could not evict least recently used item with Key {item.Key} and LastAccessed {item.Value.LastTimeOfAccess} from cache \n";
             }
             else
             {
@@ -49,16 +61,16 @@ namespace Finbourne_MemoryCache.CustomCache
             return cacheItemResult;
         }
 
-        public CacheItemResult TryGetItemFromCache(string itemKey, ConcurrentDictionary<string, CacheItem> Cache)
+        public CacheItemResult TryGetItemFromCache(string itemKey)
         {
             CacheItemResult cacheItemResult = new CacheItemResult();
             CacheItem item;
 
-            if (Cache.ContainsKey(itemKey))
+            if (this.Cache.ContainsKey(itemKey))
             {
-                if (Cache.TryGetValue(itemKey, out item))
+                if (this.Cache.TryGetValue(itemKey, out item))
                 {
-                    Cache[itemKey].LastTimeOfAccess = DateTime.UtcNow;
+                    this.Cache[itemKey].LastTimeOfAccess = DateTime.UtcNow;
 
                     cacheItemResult.CacheItem = item;
 

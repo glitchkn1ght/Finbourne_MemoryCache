@@ -4,37 +4,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Collections.Concurrent;
 using Finbourne_MemoryCache.Interfaces;
+using Microsoft.Extensions.Options;
+using Finbourne_MemoryCache.Models.Config;
+using Finbourne_MemoryCache.Config;
 
-namespace Finbourne_MemoryCache.CustomCache
+namespace Finbourne_MemoryCache.Cache
 {
-    public sealed class CustomMemoryCache
+    public interface ICacheWrapper
     {
-        private static volatile CustomMemoryCache instance;
-        private static object syncRoot = new Object();
-        private static int CacheSize { get; set; }
+        public CacheItemResult AddToCache(string itemKey, object objectToStore);
 
-        private static ICacheOrchestrator CacheOrchestrator;
+        public CacheItemResult GetFromCache(string itemKey);
+    }
+    
+    public sealed class CacheWrapper : ICacheWrapper
+    {
+        private ICustomCache CustomCache;
 
-        private static ConcurrentDictionary<string, CacheItem> Cache { get; set; }
-        private CustomMemoryCache() { }
+        private readonly CacheSettings CacheSettings;
+        
+        private CacheWrapper() { }
 
-        public static CustomMemoryCache GetInstance(int cacheSize, ICacheOrchestrator cacheOrchestrator)
+        public CacheWrapper(IOptionsMonitor<CacheSettings> cacheSettings, ICustomCache customCache)
         {
-            if (instance == null)
-            {
-                lock (syncRoot)
-                {
-                    if (instance == null)
-                    {
-                        instance = new CustomMemoryCache();
-
-                        CacheOrchestrator = cacheOrchestrator;
-                        Cache = new ConcurrentDictionary<string, CacheItem>();
-                        CacheSize = cacheSize;
-                    }
-                }
-            }
-            return instance;
+            this.CacheSettings = cacheSettings.CurrentValue;
+            this.CustomCache = customCache;
         }
 
         public CacheItemResult AddToCache(string itemKey, object objectToStore)
@@ -49,16 +43,16 @@ namespace Finbourne_MemoryCache.CustomCache
                     return cacheItemResult;
                 }
 
-                cacheItemResult = CacheOrchestrator.TryAddItemToCache(itemKey, objectToStore, Cache);
+               cacheItemResult = this.CustomCache.TryAddItemToCache(itemKey, objectToStore);
                
                if (cacheItemResult.StatusResult.StatusCode != 0)
                {
                     return cacheItemResult;
                }
 
-               if (Cache.Count >= CacheSize)
+               if (this.CustomCache.GetCacheCount() > CacheSettings.CacheSize)
                {
-                   cacheItemResult = CacheOrchestrator.EvictOldestItemFromCache(cacheItemResult, Cache);
+                   cacheItemResult = this.CustomCache.EvictOldestItemFromCache(cacheItemResult);
                }
 
                 return cacheItemResult;
@@ -87,7 +81,7 @@ namespace Finbourne_MemoryCache.CustomCache
                     return cacheItemResult;
                 }
 
-                cacheItemResult = CacheOrchestrator.TryGetItemFromCache(itemKey, Cache);
+                cacheItemResult = this.CustomCache.TryGetItemFromCache(itemKey);
 
                 return cacheItemResult;
             }
