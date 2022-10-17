@@ -8,6 +8,8 @@ General Design
 - The spec mentions a configurable threshold for the number of items i implemented this via IOptionsMonitor which allow values to be read and re-read from a config file. (Although i'm not sure i configured mine correctly to do the latter) 
 - In an attempt to make the component thread safe i registered the cache and it's wrapper class as a singletons in the DI (and is the reason for using concurrentDictionary over a normal dictionary object). However as it's a new
   area for me i'm far from certain that this is bulletproof.  
+- I wanted to keep the core operations (adding, deleting, retrieving from the cache) seperate from other concerns (input validation/eviction policy) to allow the latter to be more easily updated if required. Hence having
+  the cacheWrapper class. 
 
 Areas for improvement
 - Make sure all methods/classes are thread safe. 
