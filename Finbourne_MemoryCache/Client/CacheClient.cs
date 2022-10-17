@@ -24,7 +24,6 @@ namespace Finbourne_MemoryCache.Client
             //I know this code is clunky but I wrote this class purely to demonstrate possible usage of the cache, not as an intended part of it's functionality. 
             //Thread sleep is to make things a bit easier to disnguish.
 
-
             //Add Some Items Successfully
             this.GetCacheResult(this.CacheWrapper.AddToCache("SomeKey1", "SomeValue1"));
             Thread.Sleep(3000);

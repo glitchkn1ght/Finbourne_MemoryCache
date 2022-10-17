@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Finbourne_MemoryCache.Cache
 {
-    public class CustomCache : ICustomCache
+    public sealed class CustomCache : ICustomCache
     {
         private ConcurrentDictionary<string, CacheItem> Cache { get; set; }
 
@@ -15,9 +15,13 @@ namespace Finbourne_MemoryCache.Cache
             this.Cache = new ConcurrentDictionary<string, CacheItem>();
         }
 
+        //i think this is thread safe now...
         public int GetCacheCount()
         {
-            return this.Cache.Count;
+            lock(this.Cache)
+            {
+                return this.Cache.Count;
+            }     
         }
 
         public CacheItemResult TryAddItemToCache(string itemKey, object objectToStore)
