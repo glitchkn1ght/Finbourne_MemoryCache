@@ -14,4 +14,5 @@ Areas for improvement
 - Any non null object is accepted into the cache, including ones which are almost certainly invalid such as whitespace only strings. Really I'd like abstract the validation into its own class as its bulking out the wrapper.
 - Exhaustive unit/integration testing. 
 - As is it is possible to exceed the cache limit as the eviction is a separate operation - which can fail - that takes place after the addition of the new object. Ideally there should be some sort of rollback functionality
-similiar to transactions in sql server e.g. either all of it succeeds or none of it. 
+  similiar to transactions in sql server e.g. either all of it succeeds or none of it. 
+- The firstOrDefault search in the eviction method would be inefficient in a big cache. 
